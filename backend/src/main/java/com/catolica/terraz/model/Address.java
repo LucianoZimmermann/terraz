@@ -1,7 +1,6 @@
 package com.catolica.terraz.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity

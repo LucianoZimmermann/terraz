@@ -1,27 +1,27 @@
 package com.catolica.terraz.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Entity
-@Table(name = "tracts")
+@Table(name = "thirdPartys")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Tract {
+public class ThirdParty {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     @NotNull
-    private Float squareMeters;
+    @Column
+    private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
+    @NotNull
+    @Column
+    private String cnpj;
 }
