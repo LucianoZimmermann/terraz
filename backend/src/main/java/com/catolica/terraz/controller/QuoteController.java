@@ -2,6 +2,7 @@ package com.catolica.terraz.controller;
 
 import com.catolica.terraz.dto.QuoteDTO;
 import com.catolica.terraz.service.QuoteService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,13 +11,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/quotes")
+@RequiredArgsConstructor
 public class QuoteController {
 
     private final QuoteService quoteService;
-
-    public QuoteController(QuoteService quoteService) {
-        this.quoteService = quoteService;
-    }
 
     @PostMapping
     public ResponseEntity<QuoteDTO> createQuote(@RequestBody QuoteDTO quoteDTO) {
@@ -35,6 +33,12 @@ public class QuoteController {
         Optional<QuoteDTO> quoteDTO = quoteService.getQuoteById(id);
         return quoteDTO.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/owner/{id}")
+    public ResponseEntity<List<QuoteDTO>> getQuotesByOwnerId(@PathVariable Long id) {
+        List<QuoteDTO> quotes = quoteService.getQuotesByOwnerId(id);
+        return ResponseEntity.ok(quotes);
     }
 
     @DeleteMapping("/{id}")

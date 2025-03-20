@@ -2,7 +2,6 @@ package com.catolica.terraz.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "priceFactors")
@@ -17,7 +16,5 @@ public class PriceFactor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    @NotNull
-    private Float factor;
+    private Double factor;
 }

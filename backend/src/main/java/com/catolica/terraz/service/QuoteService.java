@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class QuoteService {
 
     private final QuoteRepository quoteRepository;
-    private final FactorService factorService;
     private final FactorRepository factorRepository;
 
     public QuoteDTO createQuote(QuoteDTO quoteDTO) {
@@ -41,6 +40,13 @@ public class QuoteService {
         quoteRepository.deleteById(id);
     }
 
+    public List<QuoteDTO> getQuotesByOwnerId(Long id) {
+        return quoteRepository.findAll().stream()
+                .filter(quote -> quote.getTractOwner() != null && id.equals(quote.getTractOwner().getId()))
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public QuoteDTO toDTO(Quote quote) {
         return QuoteDTO.builder()
                 .id(quote.getId())
@@ -56,7 +62,7 @@ public class QuoteService {
 
     public Quote toEntity(QuoteDTO quoteDTO) {
         List<Factor> factors = quoteDTO.getFactorIds().stream()
-                .map(id -> factorRepository.getById(id))
+                .map(factorRepository::getById)
                 .collect(Collectors.toList());
 
         return Quote.builder()

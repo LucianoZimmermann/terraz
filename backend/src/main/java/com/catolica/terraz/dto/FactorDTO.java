@@ -1,6 +1,6 @@
 package com.catolica.terraz.dto;
 
-import com.catolica.terraz.enums.FactorEnum;
+import com.catolica.terraz.enums.FactorType;
 import com.catolica.terraz.model.Factor;
 import lombok.*;
 
@@ -14,7 +14,7 @@ public class FactorDTO {
     private Long thirdPartyId;
     private Float materialCost;
     private Float laborCost;
-    private FactorEnum factorType;
+    private FactorType factorType;
 
     public static FactorDTO fromEntity(Factor factor) {
         return FactorDTO.builder()

@@ -1,6 +1,6 @@
 package com.catolica.terraz.model;
 
-import com.catolica.terraz.enums.FactorEnum;
+import com.catolica.terraz.enums.FactorType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -31,5 +31,5 @@ public class Factor {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "factor_type")
-    private FactorEnum factorType;
+    private FactorType factorType;
 }

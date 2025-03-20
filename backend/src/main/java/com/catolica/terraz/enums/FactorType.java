@@ -1,6 +1,6 @@
 package com.catolica.terraz.enums;
 
-public enum FactorEnum {
+public enum FactorType {
     HYDRO_SANITARY_SYSTEM,
     RAINWATER_DRAINAGE_SYSTEM,
     PAVING,

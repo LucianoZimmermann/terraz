@@ -30,8 +30,9 @@ CREATE TABLE factors (
 
 CREATE TABLE tracts (
     id SERIAL PRIMARY KEY,
-    square_meters NUMERIC NOT NULL
-    CONSTRAINT fk_address_id FOREIGN KEY (address_id) REFERENCES tracts(id)
+    square_meters NUMERIC NOT NULL,
+    address_id INT,  -- Added address_id for the foreign key reference
+    CONSTRAINT fk_tract_address FOREIGN KEY (address_id) REFERENCES addresses(id)  -- Corrected foreign key reference
 );
 
 CREATE TABLE tract_owners (
