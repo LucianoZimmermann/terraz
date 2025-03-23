@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tracts")
+@RequestMapping("/tracts")
 @RequiredArgsConstructor
 public class TractController {
     private final TractService tractService;
