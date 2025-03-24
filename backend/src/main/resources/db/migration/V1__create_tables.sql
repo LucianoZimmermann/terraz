@@ -28,18 +28,19 @@ CREATE TABLE factors (
     CONSTRAINT fk_factors_third_party FOREIGN KEY (third_party_id) REFERENCES third_parties(id)
 );
 
+CREATE TABLE tract_owners (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+    cpf VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE tracts (
     id SERIAL PRIMARY KEY,
     square_meters NUMERIC NOT NULL,
-    address_id INT,  -- Added address_id for the foreign key reference
-    CONSTRAINT fk_tract_address FOREIGN KEY (address_id) REFERENCES addresses(id)  -- Corrected foreign key reference
-);
-
-CREATE TABLE tract_owners (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    tract_id INT NOT NULL,
-    CONSTRAINT fk_tract_owners_tract FOREIGN KEY (tract_id) REFERENCES tracts(id)
+    address_id INT,
+    tract_owner_id INT,
+    CONSTRAINT fk_tract_address FOREIGN KEY (address_id) REFERENCES addresses(id),
+    CONSTRAINT fk_tract_owner FOREIGN KEY (tract_owner_id) REFERENCES tract_owners(id)
 );
 
 CREATE TABLE quotes (

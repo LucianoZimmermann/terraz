@@ -4,6 +4,7 @@ import com.catolica.terraz.dto.TractDTO;
 import com.catolica.terraz.model.Tract;
 import com.catolica.terraz.repository.TractRepository;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,30 +15,17 @@ import java.util.stream.Collectors;
 public class TractService {
 
     private final TractRepository tractRepository;
+    private final ModelMapper modelMapper; // Injeção do ModelMapper
 
     public TractDTO saveTract(TractDTO tractDTO) {
-        Tract tract = toEntity(tractDTO);
+        Tract tract = modelMapper.map(tractDTO, Tract.class);
         tractRepository.save(tract);
-        return toDTO(tract);
+        return modelMapper.map(tract, TractDTO.class);
     }
 
     public List<TractDTO> getAllTracts() {
-        return tractRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
-    }
-
-    public TractDTO toDTO(Tract tract) {
-        return TractDTO.builder()
-                .id(tract.getId())
-                .squareMeters(tract.getSquareMeters())
-                .address(tract.getAddress())
-                .build();
-    }
-
-    public Tract toEntity(TractDTO tractDTO) {
-        return Tract.builder()
-                .id(tractDTO.getId())
-                .squareMeters(tractDTO.getSquareMeters())
-                .address(tractDTO.getAddress())
-                .build();
+        return tractRepository.findAll().stream()
+                .map(tract -> modelMapper.map(tract, TractDTO.class))
+                .collect(Collectors.toList());
     }
 }

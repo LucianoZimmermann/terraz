@@ -10,6 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class TractOwner {
 
     @Id
@@ -20,8 +21,7 @@ public class TractOwner {
     @Column
     private String name;
 
-    @ManyToOne
     @NotNull
-    @JoinColumn(name = "tract_id")
-    private Tract tract;
+    @Column
+    private String cpf;
 }

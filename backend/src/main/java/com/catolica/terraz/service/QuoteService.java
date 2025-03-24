@@ -6,6 +6,7 @@ import com.catolica.terraz.model.Quote;
 import com.catolica.terraz.repository.FactorRepository;
 import com.catolica.terraz.repository.QuoteRepository;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,22 +19,48 @@ public class QuoteService {
 
     private final QuoteRepository quoteRepository;
     private final FactorRepository factorRepository;
+    private final ModelMapper modelMapper;
 
     public QuoteDTO createQuote(QuoteDTO quoteDTO) {
-        Quote quote = toEntity(quoteDTO);
+        Quote quote = modelMapper.map(quoteDTO, Quote.class);
+        if (quoteDTO.getFactorIds() != null) {
+            List<Factor> factors = quoteDTO.getFactorIds().stream()
+                    .map(factorRepository::getById)
+                    .collect(Collectors.toList());
+            quote.setFactorList(factors);
+        }
         Quote savedQuote = quoteRepository.save(quote);
-        return toDTO(savedQuote);
+        QuoteDTO savedQuoteDTO = modelMapper.map(savedQuote, QuoteDTO.class);
+        if (savedQuote.getFactorList() != null) {
+            savedQuoteDTO.setFactorIds(savedQuote.getFactorList().stream()
+                    .map(Factor::getId)
+                    .collect(Collectors.toList()));
+        }
+        return savedQuoteDTO;
     }
 
     public List<QuoteDTO> getAllQuotes() {
-        return quoteRepository.findAll().stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
+        return quoteRepository.findAll().stream().map(quote -> {
+            QuoteDTO dto = modelMapper.map(quote, QuoteDTO.class);
+            if (quote.getFactorList() != null) {
+                dto.setFactorIds(quote.getFactorList().stream()
+                        .map(Factor::getId)
+                        .collect(Collectors.toList()));
+            }
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     public Optional<QuoteDTO> getQuoteById(Long id) {
-        return quoteRepository.findById(id)
-                .map(this::toDTO);
+        return quoteRepository.findById(id).map(quote -> {
+            QuoteDTO dto = modelMapper.map(quote, QuoteDTO.class);
+            if (quote.getFactorList() != null) {
+                dto.setFactorIds(quote.getFactorList().stream()
+                        .map(Factor::getId)
+                        .collect(Collectors.toList()));
+            }
+            return dto;
+        });
     }
 
     public void deleteQuote(Long id) {
@@ -43,36 +70,15 @@ public class QuoteService {
     public List<QuoteDTO> getQuotesByOwnerId(Long id) {
         return quoteRepository.findAll().stream()
                 .filter(quote -> quote.getTractOwner() != null && id.equals(quote.getTractOwner().getId()))
-                .map(this::toDTO)
+                .map(quote -> {
+                    QuoteDTO dto = modelMapper.map(quote, QuoteDTO.class);
+                    if (quote.getFactorList() != null) {
+                        dto.setFactorIds(quote.getFactorList().stream()
+                                .map(Factor::getId)
+                                .collect(Collectors.toList()));
+                    }
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
-
-    public QuoteDTO toDTO(Quote quote) {
-        return QuoteDTO.builder()
-                .id(quote.getId())
-                .tract(quote.getTract())
-                .tractOwner(quote.getTractOwner())
-                .factorIds(quote.getFactorList().stream()
-                        .map(Factor::getId)
-                        .collect(Collectors.toList()))
-                .totalPrice(quote.getTotalPrice())
-                .createDate(quote.getCreateDate())
-                .build();
-    }
-
-    public Quote toEntity(QuoteDTO quoteDTO) {
-        List<Factor> factors = quoteDTO.getFactorIds().stream()
-                .map(factorRepository::getById)
-                .collect(Collectors.toList());
-
-        return Quote.builder()
-                .id(quoteDTO.getId())
-                .tract(quoteDTO.getTract())
-                .tractOwner(quoteDTO.getTractOwner())
-                .factorList(factors)
-                .totalPrice(quoteDTO.getTotalPrice())
-                .createDate(quoteDTO.getCreateDate())
-                .build();
-    }
-
 }

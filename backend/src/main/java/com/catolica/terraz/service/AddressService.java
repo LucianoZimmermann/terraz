@@ -5,50 +5,37 @@ import com.catolica.terraz.model.Address;
 import com.catolica.terraz.repository.AddressRepository;
 import com.catolica.terraz.repository.PriceFactorRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AddressService {
 
     private final AddressRepository addressRepository;
-
     private final PriceFactorRepository priceFactorRepository;
+    private final ModelMapper modelMapper;
 
     public List<AddressDTO> getAllAddresses() {
-        List<AddressDTO> addresses = addressRepository.findAll().stream().map(this::toDTO).toList();
-        return addresses;
+        return addressRepository.findAll().stream()
+                .map(address -> {
+                    AddressDTO dto = modelMapper.map(address, AddressDTO.class);
+                    dto.setPriceFactorId(address.getPriceFactor() != null ? address.getPriceFactor().getId() : null);
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     public AddressDTO saveAddress(AddressDTO addressDTO) {
-        Address newAddress = toEntity(addressDTO);
-        addressRepository.save(newAddress);
-        return toDTO(newAddress);
-    }
-
-    public AddressDTO toDTO(Address address) {
-        return AddressDTO.builder()
-                .id(address.getId())
-                .street(address.getStreet())
-                .city(address.getCity())
-                .neighborhood(address.getNeighborhood())
-                .cep(address.getCep())
-                .priceFactorId(address.getPriceFactor() != null ? address.getPriceFactor().getId() : null)
-                .build();
-    }
-
-
-    public Address toEntity(AddressDTO addressDTO) {
-        return Address.builder()
-                .id(addressDTO.getId())
-                .street(addressDTO.getStreet())
-                .city(addressDTO.getCity())
-                .neighborhood(addressDTO.getNeighborhood())
-                .cep(addressDTO.getCep())
-                .priceFactor(priceFactorRepository.findById(addressDTO.getPriceFactorId())
-                        .orElseThrow(() -> new RuntimeException("PriceFactor not found")))
-                .build();
+        Address address = modelMapper.map(addressDTO, Address.class);
+        address.setPriceFactor(priceFactorRepository.findById(addressDTO.getPriceFactorId())
+                .orElseThrow(() -> new RuntimeException("PriceFactor not found")));
+        Address savedAddress = addressRepository.save(address);
+        AddressDTO savedDTO = modelMapper.map(savedAddress, AddressDTO.class);
+        savedDTO.setPriceFactorId(savedAddress.getPriceFactor() != null ? savedAddress.getPriceFactor().getId() : null);
+        return savedDTO;
     }
 }

@@ -1,8 +1,8 @@
 package com.catolica.terraz.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Entity
 @Table(name = "tracts")
@@ -24,4 +24,8 @@ public class Tract {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "tract_owner_id")
+    private TractOwner tractOwner;
 }
