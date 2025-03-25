@@ -19,6 +19,11 @@ public class Factor {
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "quote_id")
+    private Quote quote;
+
+    @NotNull
+    @ManyToOne
     @JoinColumn(name = "third_party_id")
     private ThirdParty thirdParty;
 

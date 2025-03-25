@@ -41,7 +41,7 @@ public class Quote {
 
     @Column
     @NotNull
-    private Float totalPrice;
+    private Double totalPrice;
 
     @NotNull
     private LocalDateTime createDate;

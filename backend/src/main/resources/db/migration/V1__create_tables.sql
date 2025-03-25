@@ -1,8 +1,26 @@
+-- V1__create_tables.sql
+SET search_path TO public;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'factor_type_enum') THEN
+        CREATE TYPE factor_type_enum AS ENUM (
+            'HYDRO_SANITARY_SYSTEM',
+            'RAINWATER_DRAINAGE_SYSTEM',
+            'PAVING',
+            'ELECTRICAL_NETWORK',
+            'EARTHWORKS'
+        );
+    END IF;
+END$$;
+
+-- Criação da tabela price_factors
 CREATE TABLE price_factors (
     id SERIAL PRIMARY KEY,
-    factor NUMERIC NOT NULL
+    factor NUMERIC UNIQUE NOT NULL
 );
 
+-- Criação da tabela addresses
 CREATE TABLE addresses (
     id SERIAL PRIMARY KEY,
     street VARCHAR(255),
@@ -13,27 +31,22 @@ CREATE TABLE addresses (
     CONSTRAINT fk_address_price_factor FOREIGN KEY (price_factor_id) REFERENCES price_factors(id)
 );
 
+-- Criação da tabela third_parties
 CREATE TABLE third_parties (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    cnpj VARCHAR(20) NOT NULL
+    cnpj VARCHAR(20) UNIQUE NOT NULL,
+    third_party_factor_type factor_type_enum
 );
 
-CREATE TABLE factors (
-    id SERIAL PRIMARY KEY,
-    third_party_id INT NOT NULL,
-    material_cost NUMERIC NOT NULL,
-    labor_cost NUMERIC NOT NULL,
-    factor_type VARCHAR(50) NOT NULL,
-    CONSTRAINT fk_factors_third_party FOREIGN KEY (third_party_id) REFERENCES third_parties(id)
-);
-
+-- Criação da tabela tract_owners
 CREATE TABLE tract_owners (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-    cpf VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    cpf VARCHAR(255) UNIQUE NOT NULL
 );
 
+-- Criação da tabela tracts
 CREATE TABLE tracts (
     id SERIAL PRIMARY KEY,
     square_meters NUMERIC NOT NULL,
@@ -43,6 +56,7 @@ CREATE TABLE tracts (
     CONSTRAINT fk_tract_owner FOREIGN KEY (tract_owner_id) REFERENCES tract_owners(id)
 );
 
+-- Criação da tabela quotes
 CREATE TABLE quotes (
     id SERIAL PRIMARY KEY,
     tract_id INT NOT NULL,
@@ -53,10 +67,14 @@ CREATE TABLE quotes (
     CONSTRAINT fk_quotes_tract_owner FOREIGN KEY (tract_owner_id) REFERENCES tract_owners(id)
 );
 
-CREATE TABLE quote_factors (
-    quote_id BIGINT NOT NULL,
-    factor_id BIGINT NOT NULL,
-    PRIMARY KEY (quote_id, factor_id),
-    FOREIGN KEY (quote_id) REFERENCES quotes(id),
-    FOREIGN KEY (factor_id) REFERENCES factors(id)
+-- Criação da tabela factors com FK para quote_id
+CREATE TABLE factors (
+    id SERIAL PRIMARY KEY,
+    quote_id INT NOT NULL,
+    third_party_id INT NOT NULL,
+    material_cost NUMERIC NOT NULL,
+    labor_cost NUMERIC NOT NULL,
+    factor_type factor_type_enum NOT NULL,
+    CONSTRAINT fk_factors_third_party FOREIGN KEY (third_party_id) REFERENCES third_parties(id),
+    CONSTRAINT fk_factors_quote FOREIGN KEY (quote_id) REFERENCES quotes(id)
 );

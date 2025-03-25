@@ -2,14 +2,16 @@ package com.catolica.terraz.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TractDTO {
+public class RequestQuoteDTO {
     private Long id;
-    private Float squareMeters;
-    private AddressDTO address;
+    private TractDTO tract;
     private TractOwnerDTO tractOwner;
+    private List<FactorDTO> factors;
 }

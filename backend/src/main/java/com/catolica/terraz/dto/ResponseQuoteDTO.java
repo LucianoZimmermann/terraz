@@ -1,7 +1,5 @@
 package com.catolica.terraz.dto;
 
-import com.catolica.terraz.model.Tract;
-import com.catolica.terraz.model.TractOwner;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,11 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QuoteDTO {
+public class ResponseQuoteDTO {
     private Long id;
-    private Tract tract;
-    private TractOwner tractOwner;
-    private List<Long> factorIds;
-    private Float totalPrice;
+    private TractDTO tract;
+    private List<FactorDTO> factors;
+    private Double totalPrice;
     private LocalDateTime createDate;
 }

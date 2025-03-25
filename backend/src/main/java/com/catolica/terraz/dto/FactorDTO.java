@@ -10,8 +10,9 @@ import lombok.*;
 @Builder
 public class FactorDTO {
     private Long id;
+    private Long quoteId;
     private Long thirdPartyId;
-    private Float materialCost;
-    private Float laborCost;
+    private Double materialCost;
+    private Double laborCost;
     private FactorType factorType;
 }

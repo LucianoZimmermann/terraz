@@ -1,11 +1,12 @@
 package com.catolica.terraz.model;
 
+import com.catolica.terraz.enums.FactorType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
-@Table(name = "thirdPartys")
+@Table(name = "third_parties") // using underscore naming is more conventional
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,10 +19,16 @@ public class ThirdParty {
     private Long id;
 
     @NotNull
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @NotNull
-    @Column
+    @Column(nullable = false)
     private String cnpj;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "third_party_factor_type")
+    private FactorType thirdPartyFactorType;
+
 }
