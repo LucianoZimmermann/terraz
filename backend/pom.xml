@@ -94,8 +94,6 @@
                     <configLocation>${project.basedir}\src\main\resources\checkstyle\checkstyle.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
-                    <encoding>UTF-8</encoding>
-                    <locale>pt_BR</locale>
                 </configuration>
                 <executions>
                     <execution>
