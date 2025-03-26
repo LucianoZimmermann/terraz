@@ -9,10 +9,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class FactorDTO {
-    private Long id;
-    private Long quoteId;
-    private Long thirdPartyId;
-    private Double materialCost;
-    private Double laborCost;
-    private FactorType factorType;
+  private Long id;
+  private Long quoteId;
+  private Long thirdPartyId;
+  private Double materialCost;
+  private Double laborCost;
+  private FactorType factorType;
 }

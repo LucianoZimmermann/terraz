@@ -13,19 +13,17 @@ import lombok.*;
 @Builder
 public class Tract {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column
-    @NotNull
-    private Float squareMeters;
+  @Column @NotNull private Float squareMeters;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
+  @ManyToOne
+  @JoinColumn(name = "address_id")
+  private Address address;
 
-    @ManyToOne
-    @JoinColumn(name = "tract_owner_id")
-    private TractOwner tractOwner;
+  @ManyToOne
+  @JoinColumn(name = "tract_owner_id")
+  private TractOwner tractOwner;
 }

@@ -2,10 +2,9 @@ package com.catolica.terraz.dto.response;
 
 import com.catolica.terraz.dto.FactorDTO;
 import com.catolica.terraz.dto.TractDTO;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.*;
 
 @Getter
 @Setter
@@ -13,9 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ResponseQuoteDTO {
-    private Long id;
-    private TractDTO tract;
-    private List<FactorDTO> factors;
-    private Double totalPrice;
-    private LocalDateTime createDate;
+  private Long id;
+  private TractDTO tract;
+  private List<FactorDTO> factors;
+  private Double totalPrice;
+  private LocalDateTime createDate;
 }

@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class PriceFactorDTO {
-    private Long id;
-    private Double factor;
+  private Long id;
+  private Double factor;
 }

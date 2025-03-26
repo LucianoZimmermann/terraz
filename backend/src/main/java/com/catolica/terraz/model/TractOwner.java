@@ -13,15 +13,11 @@ import lombok.*;
 @Builder
 public class TractOwner {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @NotNull
-    @Column
-    private String name;
+  @NotNull @Column private String name;
 
-    @NotNull
-    @Column
-    private String cpf;
+  @NotNull @Column private String cpf;
 }

@@ -12,19 +12,19 @@ import lombok.*;
 @Builder
 public class Address {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String street;
+  private String street;
 
-    private String city;
+  private String city;
 
-    private String neighborhood;
+  private String neighborhood;
 
-    private String cep;
+  private String cep;
 
-    @ManyToOne
-    @JoinColumn(name = "price_factor_id")
-    private PriceFactor priceFactor;
+  @ManyToOne
+  @JoinColumn(name = "price_factor_id")
+  private PriceFactor priceFactor;
 }

@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ThirdPartyDTO {
-    private Long id;
-    private String name;
-    private String cnpj;
+  private Long id;
+  private String name;
+  private String cnpj;
 }

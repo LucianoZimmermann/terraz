@@ -2,10 +2,9 @@ package com.catolica.terraz.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.*;
 
 @Entity
 @Table(name = "quotes")
@@ -16,27 +15,24 @@ import java.util.List;
 @Builder
 public class Quote {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "tract_id")
-    private Tract tract;
+  @NotNull
+  @ManyToOne
+  @JoinColumn(name = "tract_id")
+  private Tract tract;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "tract_owner_id")
-    private TractOwner tractOwner;
+  @NotNull
+  @ManyToOne
+  @JoinColumn(name = "tract_owner_id")
+  private TractOwner tractOwner;
 
-    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Factor> factorList;
+  @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Factor> factorList;
 
-    @Column
-    @NotNull
-    private Double totalPrice;
+  @Column @NotNull private Double totalPrice;
 
-    @NotNull
-    private LocalDateTime createDate;
+  @NotNull private LocalDateTime createDate;
 }

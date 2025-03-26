@@ -8,10 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class AddressDTO {
-    private Long id;
-    private String street;
-    private String city;
-    private String neighborhood;
-    private String cep;
-    private Long priceFactorId;
+  private Long id;
+  private String street;
+  private String city;
+  private String neighborhood;
+  private String cep;
+  private Long priceFactorId;
 }

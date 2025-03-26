@@ -8,8 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class TractDTO {
-    private Long id;
-    private Float squareMeters;
-    private AddressDTO address;
-    private TractOwnerDTO tractOwner;
+  private Long id;
+  private Float squareMeters;
+  private AddressDTO address;
+  private TractOwnerDTO tractOwner;
 }
