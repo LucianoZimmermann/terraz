@@ -1,5 +1,7 @@
-package com.catolica.terraz.dto;
+package com.catolica.terraz.dto.response;
 
+import com.catolica.terraz.dto.FactorDTO;
+import com.catolica.terraz.dto.TractDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;

@@ -27,7 +27,7 @@ public class FactorService {
                 .orElseThrow(() -> new RuntimeException("Third Party Not Found"));
         factor.setThirdParty(thirdParty);
 
-        Factor savedFactor = factorRepository.save(factor);
+        Factor savedFactor = factorRepository.saveAndFlush(factor);
 
         FactorDTO savedFactorDTO = modelMapper.map(savedFactor, FactorDTO.class);
         if (savedFactor.getThirdParty() != null) {
@@ -44,6 +44,13 @@ public class FactorService {
             }
             return factorDTO;
         }).collect(Collectors.toList());
+    }
+
+    public List<FactorDTO> getFactorsByQuoteId(Long id) {
+        return factorRepository.findAll().stream()
+                .filter(factor -> factor.getQuote().getId().equals(id))
+                .map(factor -> modelMapper.map(factor, FactorDTO.class))
+                .collect(Collectors.toList());
     }
 
     public Double calculateFactorsTotalPrice(List<FactorDTO> factorDTOs) {

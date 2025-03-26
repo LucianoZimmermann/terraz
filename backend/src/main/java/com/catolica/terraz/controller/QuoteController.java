@@ -1,7 +1,7 @@
 package com.catolica.terraz.controller;
 
-import com.catolica.terraz.dto.RequestQuoteDTO;
-import com.catolica.terraz.dto.ResponseQuoteDTO;
+import com.catolica.terraz.dto.request.RequestQuoteDTO;
+import com.catolica.terraz.dto.response.ResponseQuoteDTO;
 import com.catolica.terraz.service.QuoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +40,5 @@ public class QuoteController {
     public ResponseEntity<List<RequestQuoteDTO>> getQuotesByOwnerId(@PathVariable Long id) {
         List<RequestQuoteDTO> quotes = quoteService.getQuotesByOwnerId(id);
         return ResponseEntity.ok(quotes);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuote(@PathVariable Long id) {
-        quoteService.deleteQuote(id);
-        return ResponseEntity.noContent().build();
     }
 }

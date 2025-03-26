@@ -1,7 +1,8 @@
 package com.catolica.terraz.service;
 
-import com.catolica.terraz.dto.RequestQuoteDTO;
-import com.catolica.terraz.dto.ResponseQuoteDTO;
+import com.catolica.terraz.dto.FactorDTO;
+import com.catolica.terraz.dto.request.RequestQuoteDTO;
+import com.catolica.terraz.dto.response.ResponseQuoteDTO;
 import com.catolica.terraz.model.*;
 import com.catolica.terraz.repository.*;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,8 +24,9 @@ public class QuoteService {
     private final FactorRepository factorRepository;
     private final TractRepository tractRepository;
     private final TractOwnerRepository tractOwnerRepository;
-    private final AddressRepository addressRepository; // Repositório para Address
+    private final AddressRepository addressRepository;
     private final FactorService factorService;
+    private final ThirdPartyRepository thirdPartyRepository;
     private final ModelMapper modelMapper;
 
     @Transactional
@@ -31,32 +34,48 @@ public class QuoteService {
         Address address = modelMapper.map(quoteDTO.getTract().getAddress(), Address.class);
         Address savedAddress = addressRepository.saveAndFlush(address);
 
+        TractOwner tractOwner = modelMapper.map(quoteDTO.getTractOwner(), TractOwner.class);
+        TractOwner savedTractOwner = tractOwnerRepository.saveAndFlush(tractOwner);
         Tract tract = modelMapper.map(quoteDTO.getTract(), Tract.class);
+        tract.setTractOwner(tractOwner);
         tract.setAddress(savedAddress);
         Tract savedTract = tractRepository.saveAndFlush(tract);
 
-        TractOwner tractOwner = modelMapper.map(quoteDTO.getTractOwner(), TractOwner.class);
-        TractOwner savedTractOwner = tractOwnerRepository.saveAndFlush(tractOwner);
-
-        List<Factor> savedFactors = quoteDTO.getFactors().stream()
-                .map(factorDTO -> factorRepository.saveAndFlush(modelMapper.map(factorDTO, Factor.class)))
-                .collect(Collectors.toList());
-        ResponseQuoteDTO responseDTO = modelMapper.map(quoteDTO, ResponseQuoteDTO.class);
-        responseDTO.setTotalPrice(factorService.calculateFactorsTotalPrice(quoteDTO.getFactors()));
-        responseDTO.setCreateDate(LocalDateTime.now());
 
         Quote quote = Quote.builder()
                 .tract(savedTract)
                 .tractOwner(savedTractOwner)
-                .factorList(savedFactors)
-                .totalPrice(responseDTO.getTotalPrice())
-                .createDate(responseDTO.getCreateDate())
+                .factorList(new ArrayList<>())
+                .totalPrice(0.0)
+                .createDate(LocalDateTime.now())
                 .build();
+        Quote savedQuote = quoteRepository.saveAndFlush(quote);
 
-        Quote savedQuote = quoteRepository.save(quote);
+        Quote finalSavedQuote = savedQuote;
+        List<Factor> savedFactors = quoteDTO.getFactors().stream()
+                .map(factorDTO -> {
+                    Factor factor = modelMapper.map(factorDTO, Factor.class);
+                    ThirdParty thirdParty = thirdPartyRepository.findById(factorDTO.getThirdPartyId())
+                            .orElseThrow(() -> new RuntimeException("Third party not found with id: " + factorDTO.getThirdPartyId()));
+                    factor.setThirdParty(thirdParty);
+                    factor.setQuote(finalSavedQuote);
+                    return factorRepository.saveAndFlush(factor);
+                })
+                .toList();
 
-        return modelMapper.map(savedQuote, ResponseQuoteDTO.class);
+        Double totalPrice = factorService.calculateFactorsTotalPrice(quoteDTO.getFactors());
+        savedQuote.getFactorList().addAll(savedFactors);
+        savedQuote.setTotalPrice(totalPrice);
+        savedQuote = quoteRepository.saveAndFlush(savedQuote);
+
+        ResponseQuoteDTO responseDTO = modelMapper.map(savedQuote, ResponseQuoteDTO.class);
+        List<FactorDTO> factorDTOList = savedQuote.getFactorList().stream()
+                .map(factor -> modelMapper.map(factor, FactorDTO.class))
+                .collect(Collectors.toList());
+        responseDTO.setFactors(factorDTOList);
+        return responseDTO;
     }
+
 
     public List<RequestQuoteDTO> getAllQuotes() {
         return quoteRepository.findAll().stream()
@@ -69,10 +88,6 @@ public class QuoteService {
                 .map(quote -> modelMapper.map(quote, RequestQuoteDTO.class));
     }
 
-    public void deleteQuote(Long id) {
-        quoteRepository.deleteById(id);
-    }
-
     public List<RequestQuoteDTO> getQuotesByOwnerId(Long id) {
         return quoteRepository.findAll().stream()
                 .filter(quote -> quote.getTractOwner() != null && id.equals(quote.getTractOwner().getId()))
@@ -80,4 +95,3 @@ public class QuoteService {
                 .collect(Collectors.toList());
     }
 }
-

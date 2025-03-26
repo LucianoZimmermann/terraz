@@ -30,13 +30,7 @@ public class Quote {
     @JoinColumn(name = "tract_owner_id")
     private TractOwner tractOwner;
 
-    @NotNull
-    @ManyToMany
-    @JoinTable(
-            name = "quote_factors",
-            joinColumns = @JoinColumn(name = "quote_id"),
-            inverseJoinColumns = @JoinColumn(name = "factor_id")
-    )
+    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Factor> factorList;
 
     @Column

@@ -1,5 +1,8 @@
-package com.catolica.terraz.dto;
+package com.catolica.terraz.dto.request;
 
+import com.catolica.terraz.dto.FactorDTO;
+import com.catolica.terraz.dto.TractDTO;
+import com.catolica.terraz.dto.TractOwnerDTO;
 import lombok.*;
 
 import java.util.List;
