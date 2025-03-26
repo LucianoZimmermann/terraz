@@ -6,18 +6,12 @@
    docker compose up --build
    ```
 
-2. **Executar o Checkstyle**
+2. **Executar o Spotless**
 
-   - Utilizando a fase de validação:
+   - Formatar código:
      
      ```bash
-     mvn validate
-     ```
-     
-   - Ou diretamente:
-     
-     ```bash
-     mvn checkstyle:check
+     mvn spotless:apply
      ```
 
 3. **Construir o pacote do projeto sem executar os testes**
