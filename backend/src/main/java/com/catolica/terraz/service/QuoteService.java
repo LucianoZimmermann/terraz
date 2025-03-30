@@ -35,6 +35,7 @@ public class QuoteService {
 
     TractOwner tractOwner = modelMapper.map(quoteDTO.getTractOwner(), TractOwner.class);
     TractOwner savedTractOwner = tractOwnerRepository.saveAndFlush(tractOwner);
+
     Tract tract = modelMapper.map(quoteDTO.getTract(), Tract.class);
     tract.setTractOwner(tractOwner);
     tract.setAddress(savedAddress);
@@ -48,32 +49,25 @@ public class QuoteService {
             .totalPrice(0.0)
             .createDate(LocalDateTime.now())
             .build();
+
+    for (FactorDTO factorDTO : quoteDTO.getFactors()) {
+      Factor factor = modelMapper.map(factorDTO, Factor.class);
+      ThirdParty thirdParty =
+          thirdPartyRepository
+              .findById(factorDTO.getThirdPartyId())
+              .orElseThrow(
+                  () ->
+                      new RuntimeException(
+                          "Third party not found with id: " + factorDTO.getThirdPartyId()));
+
+      factor.setThirdParty(thirdParty);
+      factor.setQuote(quote);
+      quote.getFactorList().add(factor);
+    }
+
+    quote.setTotalPrice(factorService.calculateFactorsTotalPrice(quoteDTO.getFactors()));
+
     Quote savedQuote = quoteRepository.saveAndFlush(quote);
-
-    Quote finalSavedQuote = savedQuote;
-    List<Factor> savedFactors =
-        quoteDTO.getFactors().stream()
-            .map(
-                factorDTO -> {
-                  Factor factor = modelMapper.map(factorDTO, Factor.class);
-                  ThirdParty thirdParty =
-                      thirdPartyRepository
-                          .findById(factorDTO.getThirdPartyId())
-                          .orElseThrow(
-                              () ->
-                                  new RuntimeException(
-                                      "Third party not found with id: "
-                                          + factorDTO.getThirdPartyId()));
-                  factor.setThirdParty(thirdParty);
-                  factor.setQuote(finalSavedQuote);
-                  return factorRepository.saveAndFlush(factor);
-                })
-            .toList();
-
-    Double totalPrice = factorService.calculateFactorsTotalPrice(quoteDTO.getFactors());
-    savedQuote.getFactorList().addAll(savedFactors);
-    savedQuote.setTotalPrice(totalPrice);
-    savedQuote = quoteRepository.saveAndFlush(savedQuote);
 
     ResponseQuoteDTO responseDTO = modelMapper.map(savedQuote, ResponseQuoteDTO.class);
     List<FactorDTO> factorDTOList =
