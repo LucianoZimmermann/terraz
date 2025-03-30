@@ -1,12 +1,13 @@
-import './App.css'
+import Header from "./components/Header";
+import QuoteForm from "./components/QuoteForm";
 
 function App() {
-
   return (
     <>
-      <div>Terraz</div>
+      <Header />
+      <QuoteForm />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

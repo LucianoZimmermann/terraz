@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
 .header {
-  @apply bg-gray-100
+  @apply bg-gray-100 flex align-middle justify-around
+}
+
+.logo {
+  @apply w-32 h-auto transition-transform duration-300 hover:scale-110 hover:opacity-80 rounded-full cursor-pointer
 }

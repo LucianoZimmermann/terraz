@@ -78,3 +78,8 @@ CREATE TABLE factors (
     CONSTRAINT fk_factors_third_party FOREIGN KEY (third_party_id) REFERENCES third_parties(id),
     CONSTRAINT fk_factors_quote FOREIGN KEY (quote_id) REFERENCES quotes(id)
 );
+
+CREATE TABLE factor_type (
+    id SERIAL PRIMARY KEY,
+    
+)

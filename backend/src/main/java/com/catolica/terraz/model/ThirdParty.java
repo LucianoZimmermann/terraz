@@ -1,6 +1,6 @@
 package com.catolica.terraz.model;
 
-import com.catolica.terraz.enums.FactorType;
+import com.catolica.terraz.enums.FactorTypeEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -14,20 +14,20 @@ import lombok.*;
 @Builder
 public class ThirdParty {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @NotNull
-  @Column(nullable = false)
-  private String name;
+    @NotNull
+    @Column(nullable = false)
+    private String name;
 
-  @NotNull
-  @Column(nullable = false)
-  private String cnpj;
+    @NotNull
+    @Column(nullable = false)
+    private String cnpj;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  @Column(name = "third_party_factor_type")
-  private FactorType thirdPartyFactorType;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "third_party_factor_type")
+    private FactorTypeEnum thirdPartyFactorTypeEnum;
 }

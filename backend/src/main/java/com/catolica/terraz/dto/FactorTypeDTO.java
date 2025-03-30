@@ -5,14 +5,10 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class FactorDTO {
+public class FactorTypeDTO {
     private Long id;
-    private Long quoteId;
-    private Long thirdPartyId;
-    private Double materialCost;
-    private Double laborCost;
     private FactorTypeEnum factorTypeEnum;
 }
