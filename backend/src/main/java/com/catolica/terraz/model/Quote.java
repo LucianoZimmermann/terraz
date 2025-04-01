@@ -25,17 +25,12 @@ public class Quote {
   @JoinColumn(name = "tract_id")
   private Tract tract;
 
-  @NotNull
-  @ManyToOne
-  @JoinColumn(name = "tract_owner_id")
-  private TractOwner tractOwner;
-
   @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
   @NotNull
   @Size(min = 5)
   private List<Factor> factorList;
 
-  @Column @NotNull private Double totalPrice;
+  @Column @NotNull private Double totalFactorsPrice;
 
   @NotNull private LocalDateTime createDate;
 }

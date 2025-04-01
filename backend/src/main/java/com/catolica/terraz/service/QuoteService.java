@@ -30,23 +30,24 @@ public class QuoteService {
 
   @Transactional
   public ResponseQuoteDTO saveQuote(RequestQuoteDTO quoteDTO) {
-    Address address = modelMapper.map(quoteDTO.getTract().getAddress(), Address.class);
-    Address savedAddress = addressRepository.saveAndFlush(address);
+    Address address =
+        addressRepository.saveAndFlush(
+            modelMapper.map(quoteDTO.getTract().getAddress(), Address.class));
 
-    TractOwner tractOwner = modelMapper.map(quoteDTO.getTractOwner(), TractOwner.class);
-    TractOwner savedTractOwner = tractOwnerRepository.saveAndFlush(tractOwner);
+    TractOwner tractOwner =
+        tractOwnerRepository.saveAndFlush(
+            modelMapper.map(quoteDTO.getTract().getTractOwner(), TractOwner.class));
 
     Tract tract = modelMapper.map(quoteDTO.getTract(), Tract.class);
     tract.setTractOwner(tractOwner);
-    tract.setAddress(savedAddress);
+    tract.setAddress(address);
     Tract savedTract = tractRepository.saveAndFlush(tract);
 
     Quote quote =
         Quote.builder()
             .tract(savedTract)
-            .tractOwner(savedTractOwner)
             .factorList(new ArrayList<>())
-            .totalPrice(0.0)
+            .totalFactorsPrice(0.0)
             .createDate(LocalDateTime.now())
             .build();
 
@@ -65,7 +66,7 @@ public class QuoteService {
       quote.getFactorList().add(factor);
     }
 
-    quote.setTotalPrice(factorService.calculateFactorsTotalPrice(quoteDTO.getFactors()));
+    quote.setTotalFactorsPrice(factorService.calculateFactorsTotalPrice(quoteDTO.getFactors()));
 
     Quote savedQuote = quoteRepository.saveAndFlush(quote);
 
@@ -90,7 +91,10 @@ public class QuoteService {
 
   public List<RequestQuoteDTO> getQuotesByOwnerId(Long id) {
     return quoteRepository.findAll().stream()
-        .filter(quote -> quote.getTractOwner() != null && id.equals(quote.getTractOwner().getId()))
+        .filter(
+            quote ->
+                quote.getTract().getTractOwner() != null
+                    && id.equals(quote.getTract().getTractOwner().getId()))
         .map(quote -> modelMapper.map(quote, RequestQuoteDTO.class))
         .collect(Collectors.toList());
   }

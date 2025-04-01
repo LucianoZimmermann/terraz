@@ -1,6 +1,5 @@
 package com.catolica.terraz.dto;
 
-import com.catolica.terraz.enums.FactorTypeEnum;
 import lombok.*;
 
 @Getter
@@ -9,10 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class FactorDTO {
-    private Long id;
-    private Long quoteId;
-    private Long thirdPartyId;
-    private Double materialCost;
-    private Double laborCost;
-    private FactorTypeEnum factorTypeEnum;
+  private Long id;
+  private Long quoteId;
+  private Long thirdPartyId;
+  private Double materialCost;
+  private Double laborCost;
+  private Long factorTypeId;
 }

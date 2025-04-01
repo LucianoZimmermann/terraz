@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class FactorTypeDTO {
-    private Long id;
-    private FactorTypeEnum factorTypeEnum;
+  private Long id;
+  private FactorTypeEnum factorTypeEnum;
 }

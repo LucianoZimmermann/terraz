@@ -1,7 +1,6 @@
 package com.catolica.terraz.service;
 
 import com.catolica.terraz.dto.FactorDTO;
-import com.catolica.terraz.enums.FactorTypeEnum;
 import com.catolica.terraz.model.Factor;
 import com.catolica.terraz.model.ThirdParty;
 import com.catolica.terraz.repository.FactorRepository;
@@ -62,7 +61,7 @@ public class FactorService {
     return factorDTOs.stream().mapToDouble(dto -> dto.getLaborCost() + dto.getMaterialCost()).sum();
   }
 
-  public List<FactorTypeEnum> getAllFactorsTypes(){
-    return factorRepository.
-  }
+  //  public List<FactorTypeEnum> getAllFactorsTypes(){
+  //    return factorRepository.
+  //  }
 }
