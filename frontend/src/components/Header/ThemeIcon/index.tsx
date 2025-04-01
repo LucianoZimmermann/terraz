@@ -1,5 +1,16 @@
-import { MoonIcon } from "@heroicons/react/24/solid";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 export default function ThemeIcon() {
-  return <MoonIcon />;
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button onClick={toggleTheme} className="toggleThemeIcon">
+      {theme === "dark" ? (
+        <SunIcon className="w-6 h-6" />
+      ) : (
+        <MoonIcon className="w-6 h-6" />
+      )}
+    </button>
+  );
 }

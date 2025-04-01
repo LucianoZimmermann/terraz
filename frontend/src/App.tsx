@@ -1,11 +1,14 @@
 import Header from "./components/Header";
-import QuoteForm from "./components/QuoteForm";
+import HomeSelector from "./components/HomeSelector";
+import { AppProviders } from "./contexts/AppProviders";
 
 function App() {
   return (
     <>
-      <Header />
-      <QuoteForm />
+      <AppProviders>
+        <Header />
+        <HomeSelector />
+      </AppProviders>
     </>
   );
 }
