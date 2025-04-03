@@ -12,6 +12,7 @@ public class AddressDTO {
   private String street;
   private String city;
   private String neighborhood;
+  private String state;
   private String cep;
   private Long priceFactorId;
 }

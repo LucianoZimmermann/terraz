@@ -28,6 +28,7 @@ CREATE TABLE addresses (
     id SERIAL PRIMARY KEY,
     street VARCHAR(255),
     city VARCHAR(255),
+    state VARCHAR(255),
     neighborhood VARCHAR(255),
     cep VARCHAR(20),
     price_factor_id INT,

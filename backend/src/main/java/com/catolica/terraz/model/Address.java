@@ -22,6 +22,8 @@ public class Address {
 
   private String neighborhood;
 
+  private String state;
+
   private String cep;
 
   @ManyToOne
