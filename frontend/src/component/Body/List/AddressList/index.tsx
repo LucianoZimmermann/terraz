@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AddressDTO, PriceFactorDTO } from "../../../../dto";
 import AddressService from "../../../../service/AddressService";
 import PriceFactorService from "../../../../service/PriceFactorService";
+import AddressRow from "../AddressRow";
 
 interface AddressListProps {
   onAdd: () => void;
@@ -27,34 +28,24 @@ export default function AddressList({ onAdd }: AddressListProps) {
   }, [loadAddresses, loadPriceFactors]);
 
   return (
-    <div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Rua</th>
-            <th>Bairro</th>
-            <th>Cidade</th>
-            <th>Estado</th>
-            <th>CEP</th>
-            <th>Fator Preço</th>
-          </tr>
-        </thead>
-        <tbody>
-          {addresses.map((addr) => (
-            <tr key={addr.id}>
-              <td>{addr.street}</td>
-              <td>{addr.neighborhood}</td>
-              <td>{addr.city}</td>
-              <td>{addr.state}</td>
-              <td>{addr.cep}</td>
-              <td>
-                {priceFactors.find((pf) => pf.id === addr.priceFactorId)
-                  ?.factor || "N/A"}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <div className="address-sub">
+        <span>Rua</span>
+        <span>Bairro</span>
+        <span>Cidade</span>
+        <span>Estado</span>
+        <span>CEP</span>
+        <span>Fator Preço</span>
+      </div>
+      <div>
+        {addresses.map((address) => (
+          <AddressRow
+            key={address.id}
+            address={address}
+            priceFactors={priceFactors}
+          />
+        ))}
+      </div>
+    </>
   );
 }
