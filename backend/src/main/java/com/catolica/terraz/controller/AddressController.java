@@ -23,4 +23,17 @@ public class AddressController {
   public ResponseEntity<List<AddressDTO>> getAllAddresses() {
     return ResponseEntity.ok(addressService.getAllAddresses());
   }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<AddressDTO> updateAddress(
+      @PathVariable Long id, @RequestBody AddressDTO addressDTO) {
+    addressDTO.setId(id);
+    return ResponseEntity.ok(addressService.updateAddress(addressDTO));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
+    addressService.deleteAddress(id);
+    return ResponseEntity.noContent().build();
+  }
 }

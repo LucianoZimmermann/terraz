@@ -1,4 +1,3 @@
--- V1__create_tables.sql
 SET search_path TO public;
 
 DO $$
@@ -55,16 +54,16 @@ CREATE TABLE tracts (
     square_meters NUMERIC NOT NULL,
     address_id INT,
     tract_owner_id INT,
-    CONSTRAINT fk_tract_address FOREIGN KEY (address_id) REFERENCES addresses(id),
+    CONSTRAINT fk_tract_address FOREIGN KEY (address_id) REFERENCES addresses(id) ON DELETE CASCADE,
     CONSTRAINT fk_tract_owner FOREIGN KEY (tract_owner_id) REFERENCES tract_owners(id)
 );
 
 CREATE TABLE quotes (
     id SERIAL PRIMARY KEY,
-    tract_id INT NOT NULL,
+    tract_id INT,
     total_factors_price NUMERIC NOT NULL,
     create_date TIMESTAMP NOT NULL,
-    CONSTRAINT fk_quotes_tract FOREIGN KEY (tract_id) REFERENCES tracts(id)
+    CONSTRAINT fk_quotes_tract FOREIGN KEY (tract_id) REFERENCES tracts(id) ON DELETE SET NULL
 );
 
 CREATE TABLE factors (

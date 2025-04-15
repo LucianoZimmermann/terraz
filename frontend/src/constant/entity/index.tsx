@@ -4,4 +4,5 @@ export enum EntityType {
   FACTOR = "Fator",
   OWNER = "Dono de Terreno",
   ADDRESS = "Endereço",
+  PRICE_FACTOR = "Fator de Preço",
 }

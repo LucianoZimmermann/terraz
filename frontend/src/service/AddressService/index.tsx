@@ -25,6 +25,11 @@ const AddressService = {
   async deleteAddress(id: number): Promise<void> {
     await api.delete(`/addresses/${id}`);
   },
+
+  async getTractsByAddressId(id: number): Promise<AddressDTO[]> {
+    const response = await api.get(`/addresses/${id}/tracts`);
+    return response.data;
+  },
 };
 
 export default AddressService;

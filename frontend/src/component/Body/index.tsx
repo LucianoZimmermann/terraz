@@ -2,7 +2,7 @@ import { useState } from "react";
 import { EntityType } from "../../constant/entity";
 import { useEntity } from "../../context/EntityContext";
 import AddressForm from "./Form/AddressForm";
-import AddressList from "./List/AddressList";
+import AddressList from "./List/Address/AddressList";
 import EntityButtons from "./EntityButtons";
 import Button from "../Button";
 
