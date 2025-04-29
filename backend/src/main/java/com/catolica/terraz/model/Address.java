@@ -22,13 +22,11 @@ public class Address {
 
   private String city;
 
-  private String neighborhood;
+  @ManyToOne
+  @JoinColumn(name = "neighborhood_id")
+  private Neighborhood neighborhood;
 
   private String state;
 
   private String cep;
-
-  @ManyToOne
-  @JoinColumn(name = "price_factor_id")
-  private PriceFactor priceFactor;
 }

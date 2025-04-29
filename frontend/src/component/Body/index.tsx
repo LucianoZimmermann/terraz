@@ -5,6 +5,7 @@ import AddressForm from "./Form/AddressForm";
 import AddressList from "./List/Address/AddressList";
 import EntityButtons from "./EntityButtons";
 import Button from "../Button";
+import PriceFactorList from "./List/PriceFactor";
 
 export default function Body() {
   const { entity } = useEntity();
@@ -30,7 +31,9 @@ export default function Body() {
   const renderList = () => {
     switch (entity) {
       case EntityType.ADDRESS:
-        return <AddressList onAdd={handleAddClick} />;
+        return <AddressList />;
+      case EntityType.PRICE_FACTOR:
+        return <PriceFactorList />;
       default:
         return <p>No data for this entity</p>;
     }
@@ -40,6 +43,7 @@ export default function Body() {
     <div>
       <EntityButtons />
       <Button content={`Adicionar ${entity}`} onClick={handleAddClick} />
+      <Button content={`Listar ${entity}`} onClick={handleCancel} />
       {isCreating ? renderForm() : renderList()}
     </div>
   );

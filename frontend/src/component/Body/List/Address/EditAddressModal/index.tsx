@@ -4,6 +4,7 @@ import { AddressDTO } from "../../../../../dto";
 import { useAddressContext } from "../../../../../context/AddressContext";
 import AddressService from "../../../../../service/AddressService";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import Button from "../../../../Button";
 
 interface EditAddressModalProps {
   address: AddressDTO;
@@ -64,7 +65,7 @@ export default function EditAddressModal({
             />
             <input
               name="neighborhood"
-              value={formData.neighborhood ?? ""}
+              value={formData.neighborhood.priceFactor.factor ?? ""}
               onChange={handleChange}
               placeholder="Bairro"
               className="border p-2 rounded"
@@ -93,12 +94,8 @@ export default function EditAddressModal({
           </div>
 
           <div className="flex justify-end mt-4 gap-2">
-            <button className="btn-cancel" onClick={onClose}>
-              Cancelar
-            </button>
-            <button className="btn-save" onClick={handleSave}>
-              Salvar
-            </button>
+            <Button content="Cancelar" onClick={onClose} />
+            <Button content="Salvar" onClick={handleSave} />
           </div>
         </div>
       </Draggable>

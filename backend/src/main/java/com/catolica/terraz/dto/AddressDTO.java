@@ -1,5 +1,6 @@
 package com.catolica.terraz.dto;
 
+import com.catolica.terraz.model.Neighborhood;
 import lombok.*;
 
 @Getter
@@ -12,8 +13,7 @@ public class AddressDTO {
   private String street;
   private String number;
   private String city;
-  private String neighborhood;
+  private Neighborhood neighborhood;
   private String state;
   private String cep;
-  private Long priceFactorId;
 }

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .body {
-  @apply bg-slate-100 text-gray-800 dark:bg-gray-900 dark:text-white;
+  @apply bg-slate-100 text-gray-800 dark:bg-gray-800 dark:text-white;
 }
 
 .header {
@@ -27,11 +27,11 @@
 }
 
 .entityButton {
-  @apply bg-gray-100 dark:bg-gray-700 rounded-xl p-3 m-2
+  @apply bg-gray-100 text-gray-800 dark:bg-gray-700 rounded-xl p-3 m-2;
 }
 
-.entityButtons{
-  @apply flex bg-slate-300 justify-center p-4
+.entityButtons {
+  @apply flex bg-gray-300 justify-center p-4;
 }
 
 .itemActions {
@@ -47,15 +47,15 @@
 }
 
 .entity-title {
-  @apply text-xl font-semibold mb-2 dark:text-gray-300 mb-1;
+  @apply text-xl font-semibold mb-1 dark:text-gray-300;
 }
 
 .address-sub {
-  @apply grid grid-cols-7 gap-3 px-3 py-2 font-bold text-gray-600 dark:text-gray-300 text-center
+  @apply grid grid-cols-7 gap-3 px-3 py-2 font-bold text-gray-600 dark:text-gray-300 text-center;
 }
 
 .address-item {
-  @apply grid grid-cols-7 gap-4 bg-slate-800 text-white rounded-2xl px-6 py-4 shadow-md items-center text-center m-5 text-sm
+  @apply grid grid-cols-7 gap-4 bg-slate-800 text-white rounded-2xl px-6 py-4 shadow-md items-center text-center m-5 text-sm;
 }
 
 .edit-address-modal-overlay {
@@ -108,4 +108,8 @@
 
 .confirm-delete-modal .btn-confirm {
   @apply px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition;
+}
+
+.entity-form {
+  @apply grid grid-cols-2 gap-6 p-6 max-w-3xl mx-auto justify-items-center;
 }

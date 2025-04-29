@@ -23,16 +23,26 @@ CREATE TABLE price_factors (
     factor NUMERIC UNIQUE NOT NULL
 );
 
+CREATE TABLE neighborhoods (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    price_factor_id INT NOT NULL,
+    CONSTRAINT fk_neighborhood_price_factor
+      FOREIGN KEY (price_factor_id)
+      REFERENCES price_factors(id)
+);
+
 CREATE TABLE addresses (
     id SERIAL PRIMARY KEY,
-    street VARCHAR(255),
-    number VARCHAR(255),
-    city VARCHAR(255),
-    state VARCHAR(255),
-    neighborhood VARCHAR(255),
-    cep VARCHAR(20),
-    price_factor_id INT,
-    CONSTRAINT fk_address_price_factor FOREIGN KEY (price_factor_id) REFERENCES price_factors(id)
+    street    VARCHAR(255),
+    number    VARCHAR(255),
+    city      VARCHAR(255),
+    state     VARCHAR(255),
+    cep       VARCHAR(20),
+    neighborhood_id  INT NOT NULL,
+    CONSTRAINT fk_address_neighborhood
+      FOREIGN KEY (neighborhood_id)
+      REFERENCES neighborhoods(id)
 );
 
 CREATE TABLE third_parties (
@@ -52,28 +62,28 @@ CREATE TABLE tract_owners (
 CREATE TABLE tracts (
     id SERIAL PRIMARY KEY,
     square_meters NUMERIC NOT NULL,
-    address_id INT,
+    address_id    INT,
     tract_owner_id INT,
     CONSTRAINT fk_tract_address FOREIGN KEY (address_id) REFERENCES addresses(id) ON DELETE CASCADE,
-    CONSTRAINT fk_tract_owner FOREIGN KEY (tract_owner_id) REFERENCES tract_owners(id)
+    CONSTRAINT fk_tract_owner   FOREIGN KEY (tract_owner_id) REFERENCES tract_owners(id)
 );
 
 CREATE TABLE quotes (
     id SERIAL PRIMARY KEY,
-    tract_id INT,
+    tract_id         INT,
     total_factors_price NUMERIC NOT NULL,
-    create_date TIMESTAMP NOT NULL,
+    create_date      TIMESTAMP NOT NULL,
     CONSTRAINT fk_quotes_tract FOREIGN KEY (tract_id) REFERENCES tracts(id) ON DELETE SET NULL
 );
 
 CREATE TABLE factors (
     id SERIAL PRIMARY KEY,
-    quote_id INT NOT NULL,
+    quote_id       INT NOT NULL,
     third_party_id INT NOT NULL,
-    material_cost NUMERIC NOT NULL,
-    labor_cost NUMERIC NOT NULL,
+    material_cost  NUMERIC NOT NULL,
+    labor_cost     NUMERIC NOT NULL,
     factor_type_id INT NOT NULL,
+    CONSTRAINT fk_factors_quote       FOREIGN KEY (quote_id)       REFERENCES quotes(id),
     CONSTRAINT fk_factors_third_party FOREIGN KEY (third_party_id) REFERENCES third_parties(id),
-    CONSTRAINT fk_factors_quote FOREIGN KEY (quote_id) REFERENCES quotes(id),
-    CONSTRAINT fk_factor_type FOREIGN KEY (factor_type_id) REFERENCES factor_types(id)
+    CONSTRAINT fk_factors_type        FOREIGN KEY (factor_type_id) REFERENCES factor_types(id)
 );

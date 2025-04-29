@@ -2,22 +2,23 @@ package com.catolica.terraz.service;
 
 import com.catolica.terraz.dto.AddressDTO;
 import com.catolica.terraz.model.Address;
+import com.catolica.terraz.model.Neighborhood;
 import com.catolica.terraz.repository.AddressRepository;
-import com.catolica.terraz.repository.PriceFactorRepository;
-import com.catolica.terraz.repository.TractRepository;
+import com.catolica.terraz.repository.NeighborhoodRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AddressService {
 
   private final AddressRepository addressRepository;
-  private final TractRepository tractRepository;
-  private final PriceFactorRepository priceFactorRepository;
+  private final NeighborhoodRepository neighborhoodRepository;
   private final ModelMapper modelMapper;
 
   public List<AddressDTO> getAllAddresses() {
@@ -25,46 +26,49 @@ public class AddressService {
         .map(
             address -> {
               AddressDTO dto = modelMapper.map(address, AddressDTO.class);
-              dto.setPriceFactorId(
-                  address.getPriceFactor() != null ? address.getPriceFactor().getId() : null);
               return dto;
             })
         .collect(Collectors.toList());
   }
 
   public AddressDTO saveAddress(AddressDTO addressDTO) {
-    Address address = modelMapper.map(addressDTO, Address.class);
-    address.setPriceFactor(
-        priceFactorRepository
-            .findById(addressDTO.getPriceFactorId())
-            .orElseThrow(() -> new RuntimeException("PriceFactor not found")));
-    Address savedAddress = addressRepository.save(address);
-    AddressDTO savedDTO = modelMapper.map(savedAddress, AddressDTO.class);
-    savedDTO.setPriceFactorId(
-        savedAddress.getPriceFactor() != null ? savedAddress.getPriceFactor().getId() : null);
-    return savedDTO;
+    Long nbId = addressDTO.getNeighborhood().getId();
+    Neighborhood neighborhood =
+        neighborhoodRepository
+            .findById(nbId)
+            .orElseThrow(() -> new RuntimeException("Neighborhood not found, id=" + nbId));
+
+    Address entity = modelMapper.map(addressDTO, Address.class);
+    entity.setNeighborhood(neighborhood);
+
+    Address saved = addressRepository.save(entity);
+
+    AddressDTO result = modelMapper.map(saved, AddressDTO.class);
+    result.setNeighborhood(saved.getNeighborhood());
+    return result;
   }
 
   public AddressDTO updateAddress(AddressDTO addressDTO) {
     Address existing =
         addressRepository
             .findById(addressDTO.getId())
-            .orElseThrow(() -> new RuntimeException("Address not found"));
+            .orElseThrow(() -> new RuntimeException("Address not found, id=" + addressDTO.getId()));
 
     modelMapper.map(addressDTO, existing);
 
-    existing.setPriceFactor(
-        priceFactorRepository
-            .findById(addressDTO.getPriceFactorId())
-            .orElseThrow(() -> new RuntimeException("PriceFactor not found")));
+    Long newNbId = addressDTO.getNeighborhood().getId();
+    if (!newNbId.equals(existing.getNeighborhood().getId())) {
+      Neighborhood newNb =
+          neighborhoodRepository
+              .findById(newNbId)
+              .orElseThrow(() -> new RuntimeException("Neighborhood not found, id=" + newNbId));
+      existing.setNeighborhood(newNb);
+    }
 
-    Address updated = addressRepository.save(existing);
+    Address saved = addressRepository.save(existing);
 
-    AddressDTO updatedDTO = modelMapper.map(updated, AddressDTO.class);
-    updatedDTO.setPriceFactorId(
-        updated.getPriceFactor() != null ? updated.getPriceFactor().getId() : null);
-
-    return updatedDTO;
+    AddressDTO result = modelMapper.map(saved, AddressDTO.class);
+    return result;
   }
 
   public void deleteAddress(Long id) {

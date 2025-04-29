@@ -1,26 +1,23 @@
 package com.catolica.terraz.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "priceFactors")
+@Table(name = "neighborhoods")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PriceFactor {
-
+public class Neighborhood {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "neighborhood_id")
-  @JsonIgnore
-  private Neighborhood neighborhood;
+  private String name;
 
-  private Double factor;
+  @ManyToOne
+  @JoinColumn(name = "price_factor_id")
+  private PriceFactor priceFactor;
 }

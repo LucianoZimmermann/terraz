@@ -14,7 +14,7 @@ export default function AddressRow({
 }: AddressCardProps) {
   const { isOpen, open, close } = useModal();
   const priceFactor = priceFactors.find(
-    (pf) => pf.id === address.priceFactorId,
+    (pf) => pf.id === address.priceFactor.factor,
   );
 
   return (
@@ -24,7 +24,7 @@ export default function AddressRow({
           {address.street}
           {address.number ? `, ${address.number}` : ""}
         </p>
-        <p>{address.neighborhood}</p>
+        <p>{address.neighborhood.priceFactor.factor}</p>
         <p>{address.city}</p>
         <p>{address.state}</p>
         <p>{address.cep}</p>
