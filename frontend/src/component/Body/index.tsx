@@ -6,6 +6,7 @@ import AddressList from "./List/Address/AddressList";
 import EntityButtons from "./EntityButtons";
 import Button from "../Button";
 import PriceFactorList from "./List/PriceFactor";
+import PriceFactorForm from "./Form/PriceFactorForm";
 
 export default function Body() {
   const { entity } = useEntity();
@@ -23,6 +24,8 @@ export default function Body() {
     switch (entity) {
       case EntityType.ADDRESS:
         return <AddressForm onCancel={handleCancel} />;
+      case EntityType.PRICE_FACTOR:
+        return <PriceFactorForm onCancel={handleCancel} />;
       default:
         return <p>No form for this entity</p>;
     }

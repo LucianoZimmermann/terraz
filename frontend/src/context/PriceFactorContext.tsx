@@ -17,7 +17,7 @@ const PriceFactorContext = createContext<PriceFactorContextType | undefined>(
   undefined,
 );
 
-export const AddressProvider = ({
+export const PriceFactorProvider = ({
   children,
 }: {
   children: React.ReactNode;

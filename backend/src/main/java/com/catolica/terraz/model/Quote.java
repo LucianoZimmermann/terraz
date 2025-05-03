@@ -1,5 +1,6 @@
 package com.catolica.terraz.model;
 
+import com.catolica.terraz.enums.FeasibilityEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,6 +32,13 @@ public class Quote {
   private List<Factor> factorList;
 
   @Column @NotNull private Double totalFactorsPrice;
+
+  private Double lotCount;
+
+  private Double pricePerLot;
+
+  @Enumerated(EnumType.STRING)
+  private FeasibilityEnum feasibility;
 
   @NotNull private LocalDateTime createDate;
 }

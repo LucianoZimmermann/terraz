@@ -1,22 +1,23 @@
 import React, { useRef, useState } from "react";
 import Draggable from "react-draggable";
-import { AddressDTO } from "../../../../../dto";
+import { NeighborhoodDTO } from "../../../../../dto";
 import { useAddressContext } from "../../../../../context/AddressContext";
-import AddressService from "../../../../../service/AddressService";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import NeighborhoodService from "../../../../../service/NeighborhoodService";
+import { usePriceFactorContext } from "../../../../../context/PriceFactorContext";
 
 interface EditPriceFactorModalProps {
-  address: AddressDTO;
+  neighborhood: NeighborhoodDTO;
   onClose: () => void;
 }
 
 export default function EditPriceFactorModal({
-  address,
+  neighborhood,
   onClose,
 }: EditPriceFactorModalProps) {
-  const { refreshAddresses } = useAddressContext();
+  const { refreshFactors } = usePriceFactorContext();
   const [factor, setFactor] = useState<number>(
-    address.priceFactor?.factor ?? 0,
+    neighborhood.priceFactor?.factor ?? 0,
   );
 
   const nodeRef = useRef<HTMLDivElement>(null!);
@@ -27,14 +28,13 @@ export default function EditPriceFactorModal({
 
   const handleSave = async () => {
     try {
-      // Atualiza apenas o fator de preço
-      const updated: AddressDTO = {
-        ...address,
-        priceFactorDTO: { id: address.priceFactor?.id, factor },
-      } as AddressDTO;
+      const updated: NeighborhoodDTO = {
+        ...neighborhood,
+        priceFactorDTO: { id: neighborhood.priceFactor?.id, factor },
+      } as NeighborhoodDTO;
 
-      await AddressService.updateAddress(updated.id!, updated);
-      refreshAddresses();
+      await NeighborhoodService.updateNeighborhood(updated.id!, updated);
+      refreshFactors();
       onClose();
     } catch (error) {
       console.error(error);

@@ -11,6 +11,19 @@ const NeighborhoodService = {
     const response = await api.get(`/neighborhoods/${id}`);
     return response.data;
   },
+
+  async updateNeighborhood(
+    id: number,
+    data: NeighborhoodDTO,
+  ): Promise<NeighborhoodDTO> {
+    const response = await api.put(`/neighborhoods/${id}`);
+    return response.data;
+  },
+
+  async createNeighborhood(data: NeighborhoodDTO): Promise<NeighborhoodDTO> {
+    const response = await api.post(`/neighborhoods`, data);
+    return response.data;
+  },
 };
 
 export default NeighborhoodService;

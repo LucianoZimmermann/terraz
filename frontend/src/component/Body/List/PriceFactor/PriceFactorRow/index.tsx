@@ -1,32 +1,32 @@
-import { AddressDTO } from "../../../../../dto";
+import { AddressDTO, NeighborhoodDTO } from "../../../../../dto";
 import { useModal } from "../../../../../hook/useModal";
 import ItemActions from "../../ItemActions";
+import EditPriceFactorModal from "../EditPriceFactorModal";
 
 interface PriceFactorRowProps {
-  address: AddressDTO;
+  neighborhood: NeighborhoodDTO;
 }
 
-export default function PriceFactorRow({ address }: PriceFactorRowProps) {
+export default function PriceFactorRow({ neighborhood }: PriceFactorRowProps) {
   const { isOpen, open, close } = useModal();
 
-  const factor = address.priceFactor?.factor;
+  const factor = neighborhood.neighborhood.priceFactor.factor;
 
   return (
     <>
       <div className="address-item">
-        <p>
-          {address.street}
-          {address.number ? `, ${address.number}` : ""}
-        </p>
-        <p>{address.neighborhood.name}</p>
-        <p>{address.city}</p>
-        <p>{address.state}</p>
-        <p>{address.cep}</p>
+        <p>{neighborhood.name}</p>
         <p>{factor ?? "N/A"}</p>
-        <ItemActions id={address.id!} entityType="addresses" onEdit={open} />
+        <ItemActions
+          id={neighborhood.id!}
+          entityType="addresses"
+          onEdit={open}
+        />
       </div>
 
-      {isOpen && <EditPriceFactorModal address={address} onClose={close} />}
+      {isOpen && (
+        <EditPriceFactorModal neighborhood={neighborhood} onClose={close} />
+      )}
     </>
   );
 }

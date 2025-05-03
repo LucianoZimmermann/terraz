@@ -1,28 +1,37 @@
 import { useState, FormEvent } from "react";
 import Button from "../../../Button";
 import AddressService from "../../../../service/AddressService";
-import { AddressDTO } from "../../../../dto";
+import { AddressDTO, NeighborhoodDTO, PriceFactorDTO } from "../../../../dto";
 import { useAddressContext } from "../../../../context/AddressContext";
 
 interface AddressFormProps {
   onCancel: () => void;
 }
 
+const initialPriceFactor: PriceFactorDTO = {
+  id: undefined,
+  factor: 0,
+};
+
+const initialNeighborhood: NeighborhoodDTO = {
+  id: undefined,
+  name: "",
+  priceFactor: initialPriceFactor,
+};
+
+const initialAddress: AddressDTO = {
+  id: undefined,
+  street: "",
+  number: "",
+  neighborhood: initialNeighborhood,
+  city: "",
+  state: "",
+  cep: "",
+};
+
 export default function AddressForm({ onCancel }: AddressFormProps) {
   const { refreshAddresses } = useAddressContext();
-  const [formData, setFormData] = useState<AddressDTO>({
-    street: "",
-    number: "",
-    neighborhood: {
-      name: "",
-      priceFactor: {
-        factor: 0,
-      },
-    },
-    city: "",
-    state: "",
-    cep: "",
-  });
+  const [formData, setFormData] = useState<AddressDTO>(initialAddress);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,6 +57,23 @@ export default function AddressForm({ onCancel }: AddressFormProps) {
     value: AddressDTO[K],
   ) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleNeighborhoodNameChange = (name: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      neighborhood: { ...prev.neighborhood, name },
+    }));
+  };
+
+  const handlePriceFactorIdChange = (id: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      neighborhood: {
+        ...prev.neighborhood,
+        priceFactor: { ...prev.neighborhood.priceFactor, id },
+      },
+    }));
   };
 
   return (
@@ -81,10 +107,8 @@ export default function AddressForm({ onCancel }: AddressFormProps) {
       <div>
         <label className="block text-sm font-medium mb-1">Bairro</label>
         <input
-          id="neighborhood"
-          type="text"
-          value={formData.neighborhood}
-          onChange={(e) => handleChange("neighborhood", e.target.value)}
+          value={formData.neighborhood.name}
+          onChange={(e) => handleNeighborhoodNameChange(e.target.value)}
           className="w-full border rounded px-3 py-2"
           required
         />
@@ -134,9 +158,7 @@ export default function AddressForm({ onCancel }: AddressFormProps) {
           id="priceFactorId"
           type="number"
           value={formData.neighborhood.priceFactor.id}
-          onChange={(e) =>
-            handleChange("priceFactorId", Number(e.target.value))
-          }
+          onChange={(e) => handlePriceFactorIdChange(Number(e.target.value))}
           className="w-full border rounded px-3 py-2"
           required
         />
