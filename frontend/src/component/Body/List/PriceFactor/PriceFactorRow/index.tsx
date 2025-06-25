@@ -10,7 +10,7 @@ interface PriceFactorRowProps {
 export default function PriceFactorRow({ neighborhood }: PriceFactorRowProps) {
   const { isOpen, open, close } = useModal();
 
-  const factor = neighborhood.neighborhood.priceFactor.factor;
+  const factor = neighborhood.priceFactor.factor;
 
   return (
     <>

@@ -5,6 +5,7 @@ import com.catolica.terraz.model.Address;
 import com.catolica.terraz.model.Neighborhood;
 import com.catolica.terraz.repository.AddressRepository;
 import com.catolica.terraz.repository.NeighborhoodRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,14 @@ public class AddressService {
               return dto;
             })
         .collect(Collectors.toList());
+  }
+
+  public AddressDTO getAddressById(Long id) {
+    Address address =
+        addressRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Address not found with id " + id));
+    return modelMapper.map(address, AddressDTO.class);
   }
 
   public AddressDTO saveAddress(AddressDTO addressDTO) {

@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import { usePriceFactorContext } from "../../../../../context/PriceFactorContext";
-import { PriceFactorDTO } from "../../../../../dto";
-import PriceFactorService from "../../../../../service/PriceFactorService";
+import { NeighborhoodDTO } from "../../../../../dto";
 import PriceFactorRow from "../PriceFactorRow";
+import NeighborhoodService from "../../../../../service/NeighborhoodService";
 
 export default function PriceFactorList() {
-  const { factors } = usePriceFactorContext();
-  const [priceFactors, setPriceFactors] = useState<PriceFactorDTO[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<NeighborhoodDTO[]>([]);
 
   useEffect(() => {
-    PriceFactorService.getAllPriceFactor()
-      .then(setPriceFactors)
-      .catch(console.error);
+    NeighborhoodService.getAllNeighborhoods().then((data) => {
+      setNeighborhoods(data);
+    });
   }, []);
+
+  if (!neighborhoods.length) {
+    return <p style={{ color: "white" }}>Carregando bairros...</p>;
+  }
 
   return (
     <>
@@ -21,12 +23,8 @@ export default function PriceFactorList() {
         <span>Fator Preço</span>
       </div>
       <div>
-        {factors.map((factors) => (
-          <PriceFactorRow
-            key={factors.id}
-            address={factors}
-            priceFactors={priceFactors}
-          />
+        {neighborhoods.map((neighborhood) => (
+          <PriceFactorRow key={neighborhood.id} neighborhood={neighborhood} />
         ))}
       </div>
     </>

@@ -65,7 +65,7 @@ export default function EditAddressModal({
             />
             <input
               name="neighborhood"
-              value={formData.neighborhood.priceFactor.factor ?? ""}
+              value={formData.neighborhood.name ?? ""}
               onChange={handleChange}
               placeholder="Bairro"
               className="border p-2 rounded"
@@ -89,6 +89,13 @@ export default function EditAddressModal({
               value={formData.cep ?? ""}
               onChange={handleChange}
               placeholder="CEP"
+              className="border p-2 rounded"
+            />
+            <input
+              name="priceFactor"
+              value={formData.neighborhood.priceFactor.factor ?? 1}
+              onChange={handleChange}
+              placeholder="Price Factor"
               className="border p-2 rounded"
             />
           </div>

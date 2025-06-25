@@ -157,7 +157,7 @@ export default function AddressForm({ onCancel }: AddressFormProps) {
         <input
           id="priceFactorId"
           type="number"
-          value={formData.neighborhood.priceFactor.id}
+          value={formData.neighborhood.priceFactor.factor}
           onChange={(e) => handlePriceFactorIdChange(Number(e.target.value))}
           className="w-full border rounded px-3 py-2"
           required

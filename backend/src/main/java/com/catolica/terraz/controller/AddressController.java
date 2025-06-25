@@ -24,6 +24,11 @@ public class AddressController {
     return ResponseEntity.ok(addressService.getAllAddresses());
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long id) {
+    return ResponseEntity.ok(addressService.getAddressById(id));
+  }
+
   @PutMapping("/{id}")
   public ResponseEntity<AddressDTO> updateAddress(
       @PathVariable Long id, @RequestBody AddressDTO addressDTO) {
