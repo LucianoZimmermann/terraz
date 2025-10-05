@@ -17,7 +17,9 @@ public class Tract {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column @NotNull private Float squareMeters;
+  @Column
+  @NotNull
+  private Float squareMeters;
 
   @ManyToOne
   @JoinColumn(name = "address_id")

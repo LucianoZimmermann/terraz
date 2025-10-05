@@ -25,6 +25,6 @@ public class Neighborhood {
     private String name;
 
     @NotNull
-    @Column(name = "price_factor", nullable = false, precision = 10, scale = 4)
+    @Column(name = "price_factor", nullable = false, precision = 10, scale = 2)
     private BigDecimal priceFactor;
 }
